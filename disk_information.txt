@@ -1,0 +1,8 @@
+==========================================================================
+ LINUX DISK AND PARTITION INFORMATION (Pending Local Ubuntu WSL Run)
+==========================================================================
+Run './scripts/run_experiments.sh' (or 'bash scripts/disk_info.sh') on your
+Ubuntu WSL laptop to overwrite this file with your actual outputs from:
+  - lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT
+  - sudo fdisk -l (or fdisk -l)
+  - df -h

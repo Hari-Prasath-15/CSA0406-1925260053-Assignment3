@@ -1,0 +1,26 @@
+============================================================================
+ THEORETICAL PROBABILITY OF DATA LOSS (Illustrative Model)
+============================================================================
+Stated Illustrative Assumption (NOT given in assignment PDF):
+  - Annualized Failure Rate (AFR) per disk : p = 0.0200 (2.00% per year)
+  - Evaluation time period                 : 1 year
+  - Statistical model                      : Binomial (independent disk failures)
+  - Array size                             : N = 6 disks
+
+Configuration                Data-Loss Condition        Probability    Percentage  
+----------------------------------------------------------------------------
+RAID 1 (2-Disk Mirror)       Both disks fail (p^2)      0.00040000     0.040000%
+RAID 1 (6-Way Mirror)        All 6 disks fail (p^6)     0.0000000001   0.00000001%
+RAID 10 (3 Mirrored Pairs)   Any pair loses 2 disks     0.00119952     0.119952%
+RAID 5 (6 Disks, 1 Parity)   >= 2 disks fail            0.00568712     0.568712%
+RAID 6 (6 Disks, 2 Parity)   >= 3 disks fail            0.00015291     0.015291%
+----------------------------------------------------------------------------
+Key Comparisons (at p = 2.00% per disk per year):
+  - 6-disk RAID 5 is 14.22x more likely to lose data than a 2-disk RAID 1.
+  - 6-disk RAID 5 is 4.74x more likely to lose data than 6-disk RAID 10.
+  - 6-disk RAID 6 reduces data-loss risk by 37.19x compared to RAID 5.
+
+Limitation of Independence Assumption:
+  Real-world disk failures are often correlated (same manufacturing batch,
+  power surges, overheating, vibration, and heavy rebuild I/O stress).
+  Therefore, actual failure probabilities can be higher than this model.

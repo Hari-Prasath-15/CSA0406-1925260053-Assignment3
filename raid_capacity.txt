@@ -1,0 +1,18 @@
+============================================================================
+ THEORETICAL RAID CAPACITY ANALYSIS (6 Disks x 4.0 TB = 24.0 TB Raw)
+============================================================================
+Note: Theoretical calculation only (no physical RAID array created).
+
+RAID Level               Formula          Usable (TB)  Efficiency   Fault Tol.
+----------------------------------------------------------------------------
+RAID 0 (Striping)        N * C            24.00        100.00%     0 disks   
+RAID 1 (6-Way Mirror)    1 * C            4.00          16.67%     5 disks   
+RAID 1 (3x 2-Disk Pairs) (N/2) * C        12.00         50.00%     1/pair    
+RAID 5 (Single Parity)   (N - 1) * C      20.00         83.33%     1 disk    
+RAID 10 (Stripe+Mirror)  (N/2) * C        12.00         50.00%     1/pair    
+RAID 6 (Dual Parity)     (N - 2) * C      16.00         66.67%     2 disks   
+----------------------------------------------------------------------------
+Assumptions:
+  - All 6 disks are identical 4.0 TB drives (Raw Capacity = 24.0 TB).
+  - RAID 10 is arranged as 3 mirrored pairs of 2 disks each, striped together.
+  - Usable capacity shown is pre-filesystem-overhead decimal terabytes (TB).

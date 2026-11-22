@@ -1,0 +1,6 @@
+==========================================================================
+ SAFE DISK READ-SPEED MEASUREMENT (Pending Local Ubuntu WSL Run)
+==========================================================================
+Run './scripts/run_experiments.sh' (or 'bash scripts/benchmark_read.sh')
+on your Ubuntu WSL laptop to overwrite this file with your actual safe
+128 MB ordinary-file read-speed measurement using dd.
