@@ -1,0 +1,5 @@
+Algorithm,References,Frames,Page_Faults,Runtime_ms,Avg_ns_per_Ref
+FIFO,100000,8,21532,1.680,16.80
+LRU,100000,8,12901,2.012,20.12
+Clock,100000,8,16482,2.009,20.09
+Optimal,100000,8,8675,4.945,49.45
