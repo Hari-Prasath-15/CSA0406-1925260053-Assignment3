@@ -1,0 +1,19 @@
+==========================================================================
+ EXPERIMENT 3: PAGE-FAULT ANALYSIS (getrusage + /proc/self/status)
+==========================================================================
+System Page Size: 4096 bytes
+
+--- Test A: Unlocked 4 MB Buffer (1024 pages) ---
+  1. After malloc() (before touching)        | dMinFlt:     0 | dMajFlt:  0 | VmRSS:   1824 KB | VmLck:    0 KB
+  2. After FIRST touch (demand allocation)   | dMinFlt:  1025 | dMajFlt:  0 | VmRSS:   6044 KB | VmLck:    0 KB
+  3. After SECOND touch (resident pages)     | dMinFlt:     0 | dMajFlt:  0 | VmRSS:   6044 KB | VmLck:    0 KB
+
+--- Test B: Locked 64 KB Control Buffer (16 pages) ---
+  1. Before mlock() and initialization       | dMinFlt:     0 | dMajFlt:  0 | VmRSS:   1952 KB | VmLck:    0 KB
+  2. After mlock() + pre-touch init          | dMinFlt:    16 | dMajFlt:  0 | VmRSS:   2016 KB | VmLck:   64 KB
+  3. During 1000-pass critical loop          | dMinFlt:     0 | dMajFlt:  0 | VmRSS:   2016 KB | VmLck:   64 KB
+
+Verification Summary:
+  - Faults during locked critical loop: 0 minor, 0 major.
+  - Caution: A short test confirms 0 faults on the locked buffer during
+    this run; production RT code should also lock stack & code via mlockall().

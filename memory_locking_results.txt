@@ -1,0 +1,22 @@
+==========================================================================
+ EXPERIMENT 1: MEMORY LOCKING (mlock) & REAL-TIME LOOP LATENCY
+==========================================================================
+Buffer Size        : 64 KB (16 pages of 4096 bytes)
+Loop Iterations    : 2000
+RLIMIT_MEMLOCK     : 67108864 bytes (65536 KB soft limit)
+
+[mlock() Status]   : SUCCESS (Locked 64 KB into RAM)
+
+Test Mode                Min (us)    Avg (us)    Worst (us)   MinFlt     MajFlt    
+--------------------------------------------------------------------------
+Unlocked (Cold Start)    0.06        0.10        58.72        34         0         
+Locked + Pre-faulted     0.06        0.07        0.11         0          0         
+--------------------------------------------------------------------------
+
+Interpretation Notes:
+  1. Page-Fault Delay : Cold unlocked buffer incurs minor faults on first touch.
+                        Pre-touching + mlock() yields 0 faults inside the loop.
+  2. Scheduler Delay  : Spikes in 'Worst (us)' can still occur due to ordinary
+                        Linux CFS scheduling, interrupts, or WSL host activity.
+  3. Real-Time Scope  : mlock() eliminates swap/page-fault delays on locked data,
+                        but ordinary Linux does NOT guarantee hard real-time.

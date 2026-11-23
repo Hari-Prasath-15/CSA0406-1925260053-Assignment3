@@ -1,0 +1,52 @@
+==========================================================================
+ EXPERIMENT 2: EDGE DEVICE 2 GB MEMORY BUDGET & TASK SIMULATOR
+==========================================================================
+Safety Note: Logical 2048 MB budget simulation; only 32 KB is physically
+allocated and locked here to avoid stressing your laptop's RAM.
+RT Control State Buffer : Allocated & mlock()-ed 32 KB safely (SUCCESS).
+
+==========================================================================
+ SCENARIO 1: BASELINE 3-TASK EDGE DEVICE PLAN
+==========================================================================
+Component / Task             RAM (MB)   Memory Policy      Page Faults?    
+--------------------------------------------------------------------------
+Linux OS & Kernel Reserve    256        Kernel Paging      No (Kernel Resident)
+Task 1: RT Control Loop      64         Paged + mlock()    NEVER (Zero Faults)
+Task 2: Machine Learning     1536       Paged + cgroup     Tolerable (Soft)
+Task 3: Logging Service      128        Paged + RingBuf    Tolerable (Best-Effort)
+--------------------------------------------------------------------------
+Total Physical RAM : 2048 MB (2.00 GB) | Swap Disk : 0 MB
+Total Requested    : 1984 MB (96.88% of physical RAM)
+Remaining Headroom : 64 MB  --> STATUS: FITS SAFELY WITHIN 2 GB RAM
+
+==========================================================================
+ SCENARIO 2: ADDING 4TH TASK (500 MB) - UNMITIGATED
+==========================================================================
+Component / Task             RAM (MB)   Memory Policy      Page Faults?    
+--------------------------------------------------------------------------
+Linux OS & Kernel Reserve    256        Kernel Paging      No (Kernel Resident)
+Task 1: RT Control Loop      64         Paged + mlock()    NEVER (Zero Faults)
+Task 2: Machine Learning     1536       Paged + cgroup     Tolerable (Soft)
+Task 3: Logging Service      128        Paged + RingBuf    Tolerable (Best-Effort)
+Task 4: New Vendor Task      500        Paged + cgroup     Tolerable       
+--------------------------------------------------------------------------
+Total Physical RAM : 2048 MB (2.00 GB) | Swap Disk : 0 MB
+Total Requested    : 2484 MB (121.29% of physical RAM)
+Memory Deficit     : 436 MB  --> STATUS: OVERFLOW! EXCEEDS 2 GB RAM!
+  -> Impact (No Swap): Linux OOM Killer will terminate a process (likely
+     the high-RSS ML task) unless budgets are reduced or RAM is upgraded.
+
+==========================================================================
+ SCENARIO 3: MITIGATED PLAN (INT8 ML QUANTIZATION -> 900 MB)
+==========================================================================
+Component / Task             RAM (MB)   Memory Policy      Page Faults?    
+--------------------------------------------------------------------------
+Linux OS & Kernel Reserve    256        Kernel Paging      No (Kernel Resident)
+Task 1: RT Control Loop      64         Paged + mlock()    NEVER (Zero Faults)
+Task 2: ML (INT8 Quant.)     900        Paged + cgroup     Tolerable (Soft)
+Task 3: Logging Service      128        Paged + RingBuf    Tolerable (Best-Effort)
+Task 4: New Vendor Task      500        Paged + cgroup     Tolerable       
+--------------------------------------------------------------------------
+Total Physical RAM : 2048 MB (2.00 GB) | Swap Disk : 0 MB
+Total Requested    : 1848 MB (90.23% of physical RAM)
+Remaining Headroom : 200 MB  --> STATUS: FITS SAFELY WITHIN 2 GB RAM

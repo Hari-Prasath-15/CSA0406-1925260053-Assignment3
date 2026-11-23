@@ -1,0 +1,19 @@
+==========================================================================
+ EXPERIMENT 4: THREE-TASK PAGE-REPLACEMENT SIMULATION (LRU, 12 Frames)
+==========================================================================
+Workload Profile (60 total accesses across 3 cycles):
+  - Real-Time Control (RT) : Pages  0..3  (4 pages, 12 accesses)
+  - Machine Learning  (ML) : Pages 10..21 (12 pages, 36 accesses)
+  - Logging Service   (LOG): Pages 30..33 (4 pages, 12 accesses)
+
+Allocation Strategy                RT Flt   ML Flt   LOG Flt  Total   
+--------------------------------------------------------------------------
+Mode A: Shared Global LRU (No Lock) 12       36       12       60      
+Mode B: 4 Locked RT + 8 Shared LRU 0        36       12       48      
+--------------------------------------------------------------------------
+
+Key Finding:
+  - In Mode A (unreserved demand paging), heavy ML tensor sweeps evict
+    the RT control task's pages, causing 12 RT page faults (UNACCEPTABLE!).
+  - In Mode B (4 reserved/locked RT frames), RT suffers 0 runtime faults,
+    completely isolating real-time control from ML/LOG memory pressure.
